@@ -2,7 +2,6 @@ const express = require("express")
 const app = express()
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb")
 require("dotenv").config()
-// const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb")
 const port = process.env.PORT || 5000
 const cors = require("cors")
 
@@ -27,6 +26,7 @@ async function run() {
     // collection create
     const blogCollection = database.collection("Blog")
     const roomCollection = database.collection("Rooms")
+    const roomBookingCollection = database.collection("RoomBooking")
 
     // get all blogs Data
     app.get("/blogs", async (req, res) => {
@@ -36,7 +36,7 @@ async function run() {
     })
 
     // single blog data get
-    app.get("/blog/:id", async (req, res) => {
+    app.get("/blogs/:id", async (req, res) => {
       const id = req.params.id
       const query = { _id: new ObjectId(id) }
       const blog = await blogCollection.findOne(query)
@@ -56,6 +56,22 @@ async function run() {
       const query = { _id: new ObjectId(id) }
       const room = await roomCollection.findOne(query)
       res.send(room)
+    })
+
+    // user  Booking Details
+    app.get("/roomBooking", async (req, res) => {
+      const email = req.query.email
+      const query = { email: email }
+      const data = await roomBookingCollection.findOne(query)
+      res.send(data)
+    })
+
+    // put data into database
+    app.post("/roomBooking", async (req, res) => {
+      const bookingData = req.body
+      console.log("Data get: ", bookingData)
+      const result = await roomBookingCollection.insertOne(bookingData)
+      res.send(result)
     })
 
     await client.db("admin").command({ ping: 1 })
