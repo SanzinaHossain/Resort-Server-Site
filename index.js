@@ -66,11 +66,27 @@ async function run() {
       res.send(data)
     })
 
+    // get all room bookings
+    app.get("/roomBookings", async (req, res) => {
+      const data = roomBookingCollection.find()
+      const result = await data.toArray()
+      res.send(result)
+    })
+
     // put data into database
     app.post("/roomBooking", async (req, res) => {
       const bookingData = req.body
       console.log("Data get: ", bookingData)
       const result = await roomBookingCollection.insertOne(bookingData)
+      res.send(result)
+    })
+
+    //  delete data from database
+    app.delete("/roomBooking/:id", async (req, res) => {
+      const id = req.params.id
+      const query = { _id: new ObjectId(id) }
+      console.log(query)
+      const result = await roomBookingCollection.deleteOne(query)
       res.send(result)
     })
 
