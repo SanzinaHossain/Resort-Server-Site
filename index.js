@@ -90,7 +90,6 @@ async function run() {
       res.send(result)
     })
 
-    await client.db("admin").command({ ping: 1 })
     console.log("You successfully connected to MongoDB!")
   } finally {
   }
