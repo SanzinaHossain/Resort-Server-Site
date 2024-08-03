@@ -27,6 +27,7 @@ async function run() {
     const blogCollection = database.collection("Blog")
     const roomCollection = database.collection("Rooms")
     const roomBookingCollection = database.collection("RoomBooking")
+    const contactCollection = database.collection("ContactData")
 
     // get all blogs Data
     app.get("/blogs", async (req, res) => {
@@ -78,6 +79,20 @@ async function run() {
       const bookingData = req.body
       console.log("Data get: ", bookingData)
       const result = await roomBookingCollection.insertOne(bookingData)
+      res.send(result)
+    })
+
+    // user Contact Messages
+    app.post("/userContacts", async (req, res) => {
+      const contactData = req.body
+      const result = await contactCollection.insertOne(contactData)
+      res.send(result)
+    })
+
+    // get user Contact Messages
+    app.get("/userContacts", async (req, res) => {
+      const data = contactCollection.find()
+      const result = await data.toArray()
       res.send(result)
     })
 
