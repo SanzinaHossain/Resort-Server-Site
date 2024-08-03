@@ -28,6 +28,7 @@ async function run() {
     const roomCollection = database.collection("Rooms")
     const roomBookingCollection = database.collection("RoomBooking")
     const contactCollection = database.collection("ContactData")
+    const blogCommentCollection = database.collection("BlogComment")
 
     // get all blogs Data
     app.get("/blogs", async (req, res) => {
@@ -74,11 +75,26 @@ async function run() {
       res.send(result)
     })
 
-    // put data into database
+    // put room booking data into database
     app.post("/roomBooking", async (req, res) => {
       const bookingData = req.body
       console.log("Data get: ", bookingData)
       const result = await roomBookingCollection.insertOne(bookingData)
+      res.send(result)
+    })
+
+    // put blog comment data into database
+    app.post("/blogComments", async (req, res) => {
+      const commentData = req.body
+      console.log(commentData)
+      const result = await blogCommentCollection.insertOne(commentData)
+      res.send(result)
+    })
+
+    // get blogComment
+    app.get("/blogComment", async (req, res) => {
+      const data = blogCommentCollection.find()
+      const result = await data.toArray()
       res.send(result)
     })
 
